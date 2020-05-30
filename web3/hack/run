@@ -5,8 +5,12 @@ BDIR=`cd $( dirname "${BASH_SOURCE[0]}" ) && cd .. && pwd`
 cd ${BDIR}
 
 function compile() {
-    pkg -t linux index.js -o ./hack/build/ecrecover
-    docker build  -t ecrecover:1.0 -f ./hack/ecrecover.Dockerfile .
+    pkg -t linux index.js -o ./hack/build/web3
+    docker build  -t web3:1.0 -f ./hack/web3.Dockerfile .
+}
+
+function start() {
+    HTTP_PORT=5000 node index.js
 }
 
 function show_help(){
@@ -23,6 +27,9 @@ EOF
 case "${1}" in
     compile)
         compile
+        ;;
+    start)
+        start
         ;;
     -h)
         show_help
