@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+BDIR=`cd $( dirname "${BASH_SOURCE[0]}" ) && cd .. && pwd`
+cd ${BDIR}
+
+function compile() {
+    pkg -t linux index.js -o ./hack/build/ecrecover
+    docker build  -t ecrecover:1.0 -f ./hack/ecrecover.Dockerfile .
+}
+
+function show_help(){
+    cat <<-EOF
+${@}
+USAGE: ./hack/run [COMMANDS]
+
+COMMANDS:
+    compile
+EOF
+    exit 1
+}
+
+case "${1}" in
+    compile)
+        compile
+        ;;
+    -h)
+        show_help
+        ;;
+    *)
+        show_help "no command ${1}"
+        exit 1
+        ;;
+esac
